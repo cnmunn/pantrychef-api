@@ -41,6 +41,11 @@ class RecipeMatch(RecipeSummary):
     missing_ingredients: list[IngredientRead] = Field(
         default_factory=list, description="List of ingredients user is missing"
     )
+    uses_expiring_ingredients: int | None = Field(
+        default=None,
+        ge=0,
+        description="Number of soon-to-expire ingredients used (when prioritize_expiring=true)",
+    )
 
 
 class ShoppingListItem(BaseModel):

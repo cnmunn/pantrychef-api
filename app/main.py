@@ -3,7 +3,15 @@
 from fastapi import FastAPI
 
 from app.config import get_settings
-from app.routers import auth_router
+from app.routers import (
+    auth_router,
+    favorites_router,
+    history_router,
+    ingredients_router,
+    pantry_router,
+    recipes_router,
+    recommendations_router,
+)
 
 settings = get_settings()
 
@@ -19,6 +27,12 @@ app = FastAPI(
 
 # Include routers
 app.include_router(auth_router)
+app.include_router(ingredients_router)
+app.include_router(pantry_router)
+app.include_router(recipes_router)
+app.include_router(recommendations_router)
+app.include_router(favorites_router)
+app.include_router(history_router)
 
 
 @app.get("/", tags=["Health"])

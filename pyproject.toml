@@ -9,7 +9,8 @@ dependencies = [
     "asyncpg>=0.31.0",
     "email-validator>=2.3.0",
     "fastapi>=0.122.0",
-    "passlib[bcrypt]>=1.7.4",
+    "passlib>=1.7.4",
+    "bcrypt==4.0.1",
     "pydantic>=2.12.5",
     "pydantic-settings>=2.11.0",
     "python-jose[cryptography]>=3.5.0",
@@ -20,6 +21,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "aiosqlite>=0.21.0",
     "httpx>=0.28.1",
     "mypy>=1.19.0",
     "pytest>=8.4.2",
@@ -28,8 +30,20 @@ dev = [
     "ruff>=0.14.7",
 ]
 
+[project.scripts]
+pantrychef = "app.main:app"
+
+# Run these with: uv run <command>
+# uv run uvicorn app.main:app --reload  (dev server)
+# uv run pytest                          (tests)
+# uv run ruff check .                    (lint)
+# uv run ruff format .                   (format)
+# uv run alembic upgrade head            (migrate)
+# uv run python scripts/seed.py          (seed)
+
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
 testpaths = ["tests"]
 
 [tool.ruff]

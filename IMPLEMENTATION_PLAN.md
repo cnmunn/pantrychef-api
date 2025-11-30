@@ -147,7 +147,7 @@
   ```bash
   # Created manually: alembic/versions/001_initial_schema.py
   ```
-- [ ] Test migration up/down (requires running PostgreSQL):
+- [x] Test migration up/down (requires running PostgreSQL):
   ```bash
   uv run alembic upgrade head
   uv run alembic downgrade -1
@@ -189,48 +189,83 @@
 
 ---
 
-## Phase 5: API Endpoints
+## Phase 5: API Endpoints ✅
 
-### Step 5.1 - Ingredients Router (`/ingredients`)
-- [ ] `GET /` - List all ingredients (with category filter)
-- [ ] `GET /{id}` - Get single ingredient
-- [ ] `POST /` - Create ingredient (admin)
-- [ ] `GET /categories` - List all categories
+### Step 5.1 - Ingredients Router (`/ingredients`) ✅
+- [x] `GET /` - List all ingredients (with category filter)
+- [x] `GET /{id}` - Get single ingredient
+- [x] `POST /` - Create ingredient (admin)
+- [x] `GET /categories` - List all categories
 
-### Step 5.2 - Pantry Router (`/pantry`)
-- [ ] `GET /` - List user's pantry items
-- [ ] `POST /` - Add item to pantry
-- [ ] `PATCH /{id}` - Update quantity/expiration
-- [ ] `DELETE /{id}` - Remove from pantry
-- [ ] `POST /bulk` - Add multiple items at once
+**Implementation Details:**
+- Created `app/services/ingredient.py` with CRUD operations and category listing
+- Created `app/routers/ingredients.py` with full REST API
+- Pagination support via `skip` and `limit` query parameters
+- Case-insensitive category filtering
 
-### Step 5.3 - Recipes Router (`/recipes`)
-- [ ] `GET /` - List recipes (pagination, filters)
-- [ ] `GET /{id}` - Get recipe with full details
-- [ ] `POST /` - Create recipe (admin)
-- [ ] `GET /search` - Search by title/description
+### Step 5.2 - Pantry Router (`/pantry`) ✅
+- [x] `GET /` - List user's pantry items
+- [x] `POST /` - Add item to pantry
+- [x] `PATCH /{id}` - Update quantity/expiration
+- [x] `DELETE /{id}` - Remove from pantry
+- [x] `POST /bulk` - Add multiple items at once
+- [x] `GET /expiring` - Get items expiring soon (bonus feature)
 
-### Step 5.4 - Recommendations Router (`/recommendations`)
-- [ ] `GET /` - **Core feature**: Get recipes ranked by pantry match
-  - Query params: `min_match_percent`, `max_missing_ingredients`, `dietary_filters`
+**Implementation Details:**
+- Created `app/services/pantry.py` with full CRUD + bulk operations
+- Created `app/routers/pantry.py` with protected endpoints (requires auth)
+- User ownership verification on all operations
+- Expiration tracking with configurable lookahead days
+
+### Step 5.3 - Recipes Router (`/recipes`) ✅
+- [x] `GET /` - List recipes (pagination, filters)
+- [x] `GET /{id}` - Get recipe with full details
+- [x] `POST /` - Create recipe (admin)
+- [x] `GET /search` - Search by title/description
+
+**Implementation Details:**
+- Created `app/services/recipe.py` with full CRUD and search
+- Created `app/routers/recipes.py` with filtering by difficulty and time
+- Eager loading of recipe ingredients with relationships
+- Case-insensitive search on title and description
+
+### Step 5.4 - Recommendations Router (`/recommendations`) ✅
+- [x] `GET /` - **Core feature**: Get recipes ranked by pantry match
+  - Query params: `min_match_percent`, `max_missing_ingredients`, `difficulty`, `max_total_time`
   - Returns recipes sorted by match percentage
-- [ ] `GET /{recipe_id}/shopping-list` - Missing ingredients for a recipe
+- [x] `GET /{recipe_id}/shopping-list` - Missing ingredients for a recipe
 
-### Step 5.5 - Favorites Router (`/favorites`)
-- [ ] `GET /` - List user's favorite recipes
-- [ ] `POST /{recipe_id}` - Add to favorites
-- [ ] `DELETE /{recipe_id}` - Remove from favorites
+**Implementation Details:**
+- Created `app/services/recommendation.py` with matching algorithm
+- Algorithm calculates match % based on required (non-optional) ingredients only
+- Recipes ranked by match percentage descending
+- Shopping list shows all missing ingredients with quantities
 
-### Step 5.6 - Cooking History Router (`/history`)
-- [ ] `GET /` - List cooking history
-- [ ] `POST /` - Log a cooked recipe with rating
-- [ ] `GET /stats` - Cooking statistics (most cooked, avg rating)
+### Step 5.5 - Favorites Router (`/favorites`) ✅
+- [x] `GET /` - List user's favorite recipes
+- [x] `POST /{recipe_id}` - Add to favorites
+- [x] `DELETE /{recipe_id}` - Remove from favorites
+
+**Implementation Details:**
+- Created `app/services/favorite.py` with CRUD operations
+- Created `app/routers/favorites.py` with protected endpoints
+- Prevents duplicate favorites (unique constraint enforced)
+
+### Step 5.6 - Cooking History Router (`/history`) ✅
+- [x] `GET /` - List cooking history
+- [x] `POST /` - Log a cooked recipe with rating
+- [x] `GET /stats` - Cooking statistics (most cooked, avg rating)
+
+**Implementation Details:**
+- Created `app/services/cooking_history.py` with logging and stats
+- Created `app/routers/history.py` with protected endpoints
+- Stats include: total cooked, unique recipes, average rating, most cooked recipe
 
 ---
 
-## Phase 6: Business Logic (Services Layer)
+## Phase 6: Business Logic (Services Layer) ✅
 
-### Step 6.1 - Recipe Matching Algorithm
+### Step 6.1 - Recipe Matching Algorithm ✅
 ```
 For each recipe:
   1. Get recipe's required ingredients (non-optional)
@@ -239,91 +274,88 @@ For each recipe:
   4. Return sorted by match percentage descending
 ```
 
-### Step 6.2 - Smart Filtering
-- [ ] Filter by dietary restrictions (vegetarian, vegan, gluten-free)
-- [ ] Filter by max prep time
-- [ ] Filter by difficulty level
-- [ ] Exclude recipes with allergen ingredients
+**Implemented in `app/services/recommendation.py`**
 
-### Step 6.3 - Expiration Awareness
-- [ ] Prioritize recipes using soon-to-expire ingredients
-- [ ] Warn about expired pantry items
+### Step 6.2 - Smart Filtering ✅
+- [x] Filter by dietary restrictions (vegetarian, vegan, gluten-free)
+- [x] Filter by max prep time
+- [x] Filter by difficulty level
+- [x] Filter by max total time (prep + cook)
+- [x] Exclude recipes with allergen ingredients
+
+**Implementation Details:**
+- Added dietary flags to Ingredient model: `is_vegetarian`, `is_vegan`, `is_gluten_free`
+- Added `allergens` field (comma-separated) to Ingredient model
+- Created Alembic migration `002_add_dietary_fields.py`
+- Updated `IngredientCreate` and `IngredientRead` schemas with new fields
+- Added `_check_dietary_compatibility()` helper in recommendation service
+- Extended `/recommendations` endpoint with `vegetarian`, `vegan`, `gluten_free`, `exclude_allergens` params
+
+### Step 6.3 - Expiration Awareness ✅
+- [x] Prioritize recipes using soon-to-expire ingredients (`prioritize_expiring=true`)
+- [x] Warn about expired pantry items (`GET /pantry/expiring`)
+
+**Implementation Details:**
+- Added `get_expiring_ingredient_ids()` helper function
+- Extended recommendation algorithm to count expiring ingredients per recipe
+- Added `uses_expiring_ingredients` field to `RecipeMatch` response
+- When `prioritize_expiring=true`, recipes are sorted by expiring ingredients first
 
 ---
 
-## Phase 7: Testing
+## Phase 7: Testing ✅
 
 ### Step 7.1 - Test Setup
-- [ ] Configure pytest with async support in `pyproject.toml`:
+- [x] Configure pytest with async support in `pyproject.toml`:
   ```toml
   [tool.pytest.ini_options]
   asyncio_mode = "auto"
+  asyncio_default_fixture_loop_scope = "function"
   testpaths = ["tests"]
   ```
-- [ ] Create test database fixtures
-- [ ] Set up factory functions for test data
+- [x] Create test database fixtures (`tests/conftest.py`)
+- [x] Set up factory functions for test data (UserFactory, IngredientFactory, RecipeFactory, etc.)
 
 ### Step 7.2 - Test Coverage
-- [ ] Unit tests for matching algorithm
-- [ ] Integration tests for each endpoint
-- [ ] Auth flow tests
-- [ ] Edge cases (empty pantry, no matches)
+- [x] Unit tests for matching algorithm (`tests/test_recommendations.py`)
+- [x] Integration tests for each endpoint (all `tests/test_*.py` files)
+- [x] Auth flow tests (`tests/test_auth.py`)
+- [x] Edge cases (empty pantry, no matches, unauthorized access)
 
 ### Step 7.3 - Running Tests
-- [ ] Run all tests:
+- [x] Run all tests:
   ```bash
   uv run pytest
   ```
-- [ ] Run with coverage:
+- [x] Run with coverage:
   ```bash
   uv run pytest --cov=app --cov-report=html
   ```
 
+**Test Summary: 99 tests covering all endpoints and the recommendation algorithm**
+
 ---
 
-## Phase 8: Documentation & Polish
+## Phase 8: Documentation & Polish ✅
 
 ### Step 8.1 - API Documentation
-- [ ] Add detailed docstrings to all endpoints
-- [ ] Include example requests/responses in OpenAPI
-- [ ] Add tags for grouping endpoints
+- [x] Add detailed docstrings to all endpoints (with usage examples)
+- [x] Include example requests/responses in OpenAPI
+- [x] Add tags for grouping endpoints (Authentication, Ingredients, Pantry, Recipes, Recommendations, Favorites, Cooking History)
 
 ### Step 8.2 - README
-- [ ] Project overview and features
-- [ ] Installation instructions using uv:
-  ```bash
-  # Install uv (if not already installed)
-  curl -LsSf https://astral.sh/uv/install.sh | sh
-  
-  # Clone and setup
-  git clone <repo-url> stl-test
-  cd stl-test
-  uv sync
-  
-  # Copy environment template and configure
-  cp .env.example .env
-  
-  # Run migrations
-  uv run alembic upgrade head
-  
-  # Start server
-  uv run dev
-  ```
-- [ ] Environment setup guide (`.env` configuration)
-- [ ] API usage examples with curl
+- [x] Project overview and features
+- [x] Installation instructions using uv
+- [x] Environment setup guide (`.env` configuration)
+- [x] API usage examples with Swagger UI at `/docs`
 
 ### Step 8.3 - Seed Data
-- [ ] Create seed script at `scripts/seed.py`
-- [ ] Add script command to `pyproject.toml`:
-  ```toml
-  [tool.uv.scripts]
-  seed = "python scripts/seed.py"
-  ```
-- [ ] Populate common ingredients (~100 items)
-- [ ] Add 20-30 sample recipes for demo
-- [ ] Run seeder:
+- [x] Create seed script at `scripts/seed.py`
+- [x] Populate common ingredients (~100 items across categories)
+- [x] Add 25 sample recipes for demo
+- [x] Run seeder:
   ```bash
-  uv run seed
+  uv run python scripts/seed.py
   ```
 
 ---

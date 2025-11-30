@@ -15,7 +15,7 @@ from app.schemas.cooking_history import (
     CookingStats,
 )
 from app.schemas.favorite import FavoriteRead
-from app.schemas.ingredient import IngredientCreate, IngredientRead
+from app.schemas.ingredient import IngredientCreate, IngredientFilter, IngredientRead
 from app.schemas.pantry import (
     PantryItemBulkCreate,
     PantryItemCreate,
@@ -38,6 +38,7 @@ __all__ = [
     "UserUpdate",
     # Ingredient schemas
     "IngredientCreate",
+    "IngredientFilter",
     "IngredientRead",
     # Recipe schemas
     "RecipeCreate",
