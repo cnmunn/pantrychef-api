@@ -1,13 +1,5 @@
 {
   "project": "pantrychef",
-  "openapi_spec": "openapi.json",
-  "stainless_config": "stainless.yml",
-  "targets": {
-    "go": {
-      "output_path": "../sdks/pantrychef-go"
-    },
-    "typescript": {
-      "output_path": "../sdks/pantrychef-typescript"
-    }
-  }
+  "openapi_spec": "/Users/chrismunn/projects/stl-test/.stainless/openapi.json",
+  "stainless_config": "/Users/chrismunn/projects/stl-test/.stainless/stainless.yml"
 }
