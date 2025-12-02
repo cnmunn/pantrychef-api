@@ -1,0 +1,126 @@
+# yaml-language-server: $schema=https://app.stainless.com/config.schema.json
+
+edition: 2025-10-10
+
+organization:
+  name: pantrychef
+  docs: ''
+  contact: ''
+
+targets:
+  typescript:
+    edition: typescript.2025-10-10
+    package_name: pantrychef
+    production_repo: null
+    publish:
+      npm: false
+  go:
+    edition: go.2025-10-08
+    package_name: pantrychef
+    production_repo: null
+    options:
+      enable_v2: true
+
+# Point to your local FastAPI server for development
+environments:
+  production: http://localhost:8000
+
+# Resource mappings for PantryChef API
+resources:
+  auth:
+    models:
+      user: '#/components/schemas/UserRead'
+      user_create: '#/components/schemas/UserCreate'
+      token: '#/components/schemas/Token'
+    methods:
+      register: post /auth/register
+      login: post /auth/login
+      me: get /auth/me
+
+  ingredients:
+    models:
+      ingredient: '#/components/schemas/IngredientRead'
+      ingredient_create: '#/components/schemas/IngredientCreate'
+    methods:
+      list: get /ingredients/
+      create: post /ingredients/
+      retrieve: get /ingredients/{ingredient_id}
+      list_categories: get /ingredients/categories
+
+  pantry:
+    models:
+      pantry_item: '#/components/schemas/PantryItemRead'
+      pantry_item_create: '#/components/schemas/PantryItemCreate'
+      pantry_item_update: '#/components/schemas/PantryItemUpdate'
+    methods:
+      list: get /pantry/
+      add: post /pantry/
+      retrieve: get /pantry/{item_id}
+      update: patch /pantry/{item_id}
+      remove: delete /pantry/{item_id}
+      list_expiring: get /pantry/expiring
+      bulk_add: post /pantry/bulk
+
+  recipes:
+    models:
+      recipe: '#/components/schemas/RecipeRead'
+      recipe_summary: '#/components/schemas/RecipeSummary'
+      recipe_create: '#/components/schemas/RecipeCreate'
+    methods:
+      list: get /recipes/
+      create: post /recipes/
+      retrieve: get /recipes/{recipe_id}
+      search: get /recipes/search
+
+  recommendations:
+    models:
+      recipe_match: '#/components/schemas/RecipeMatch'
+      shopping_list: '#/components/schemas/ShoppingList'
+    methods:
+      get: get /recommendations/
+      shopping_list: get /recommendations/{recipe_id}/shopping-list
+
+  favorites:
+    models:
+      favorite: '#/components/schemas/FavoriteRead'
+    methods:
+      list: get /favorites/
+      add: post /favorites/{recipe_id}
+      remove: delete /favorites/{recipe_id}
+
+  history:
+    models:
+      cooking_history: '#/components/schemas/CookingHistoryRead'
+    methods:
+      list: get /history/
+      create: post /history/
+      stats: get /history/stats
+
+  # Utility endpoints
+  health:
+    methods:
+      check: get /health
+      root: get /
+
+settings:
+  disable_mock_tests: true
+  license: Apache-2.0
+
+client_settings:
+  opts:
+    # Using bearer token auth (JWT from /auth/login)
+    bearer_token:
+      type: string
+      nullable: true
+      read_env: PANTRYCHEF_BEARER_TOKEN
+
+readme:
+  example_requests:
+    default:
+      type: request
+      endpoint: get /recipes/
+      params: {}
+    headline:
+      type: request
+      endpoint: get /recommendations/
+      params: {}
