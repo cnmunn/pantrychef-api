@@ -50,6 +50,9 @@ class RecipeBase(BaseModel):
     servings: int | None = Field(default=None, ge=1)
     image_url: str | None = Field(default=None, max_length=500)
     source_url: str | None = Field(default=None, max_length=500)
+    cuisine_type: str | None = Field(
+        default=None, max_length=50, description="Type of cuisine (e.g., Italian, Mexican, Asian)"
+    )
 
 
 class RecipeCreate(RecipeBase):
@@ -84,4 +87,5 @@ class RecipeSummary(BaseModel):
     cook_time: int | None
     difficulty_level: str | None
     servings: int | None
+    cuisine_type: str | None
     image_url: str | None

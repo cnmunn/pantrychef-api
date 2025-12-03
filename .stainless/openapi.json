@@ -2323,6 +2323,19 @@
             ],
             "title": "Source Url"
           },
+          "cuisine_type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 50
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cuisine Type",
+            "description": "Type of cuisine (e.g., Italian, Mexican, Asian)"
+          },
           "ingredients": {
             "items": {
               "$ref": "#/components/schemas/RecipeIngredientCreate"
@@ -2497,6 +2510,17 @@
             ],
             "title": "Servings"
           },
+          "cuisine_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cuisine Type"
+          },
           "image_url": {
             "anyOf": [
               {
@@ -2558,6 +2582,7 @@
           "cook_time",
           "difficulty_level",
           "servings",
+          "cuisine_type",
           "image_url",
           "match_percentage",
           "matched_ingredients",
@@ -2665,6 +2690,19 @@
             ],
             "title": "Source Url"
           },
+          "cuisine_type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 50
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cuisine Type",
+            "description": "Type of cuisine (e.g., Italian, Mexican, Asian)"
+          },
           "id": {
             "type": "integer",
             "title": "Id"
@@ -2758,6 +2796,17 @@
             ],
             "title": "Servings"
           },
+          "cuisine_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cuisine Type"
+          },
           "image_url": {
             "anyOf": [
               {
@@ -2779,6 +2828,7 @@
           "cook_time",
           "difficulty_level",
           "servings",
+          "cuisine_type",
           "image_url"
         ],
         "title": "RecipeSummary",
