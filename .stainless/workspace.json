@@ -1,5 +1,5 @@
 {
   "project": "pantrychef",
-  "openapi_spec": "/Users/chrismunn/projects/stl-test/.stainless/openapi.json",
-  "stainless_config": "/Users/chrismunn/projects/stl-test/.stainless/stainless.yml"
+  "openapi_spec": "openapi.json",
+  "stainless_config": "stainless.yml"
 }
