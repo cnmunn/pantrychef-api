@@ -48,6 +48,7 @@ class RecipeBase(BaseModel):
         description="Difficulty level: easy, medium, or hard",
     )
     servings: int | None = Field(default=None, ge=1)
+    calories: int | None = Field(default=None, ge=0, description="Calories per serving")
     image_url: str | None = Field(default=None, max_length=500)
     source_url: str | None = Field(default=None, max_length=500)
 
@@ -84,4 +85,5 @@ class RecipeSummary(BaseModel):
     cook_time: int | None
     difficulty_level: str | None
     servings: int | None
+    calories: int | None
     image_url: str | None

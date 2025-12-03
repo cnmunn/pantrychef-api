@@ -37,6 +37,7 @@ class Recipe(Base):
         String(20), nullable=True
     )  # easy, medium, hard
     servings: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    calories: Mapped[int | None] = mapped_column(Integer, nullable=True)  # per serving
     image_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
     source_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
     created_at: Mapped[datetime] = mapped_column(
