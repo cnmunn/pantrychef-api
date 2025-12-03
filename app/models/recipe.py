@@ -39,6 +39,9 @@ class Recipe(Base):
     servings: Mapped[int | None] = mapped_column(Integer, nullable=True)
     image_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
     source_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    cuisine_type: Mapped[str | None] = mapped_column(
+        String(50), nullable=True
+    )  # e.g., Italian, Mexican, Asian
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
