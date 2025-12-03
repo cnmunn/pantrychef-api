@@ -2299,6 +2299,19 @@
             ],
             "title": "Servings"
           },
+          "calories": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Calories",
+            "description": "Calories per serving"
+          },
           "image_url": {
             "anyOf": [
               {
@@ -2497,6 +2510,17 @@
             ],
             "title": "Servings"
           },
+          "calories": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Calories"
+          },
           "image_url": {
             "anyOf": [
               {
@@ -2558,6 +2582,7 @@
           "cook_time",
           "difficulty_level",
           "servings",
+          "calories",
           "image_url",
           "match_percentage",
           "matched_ingredients",
@@ -2640,6 +2665,19 @@
               }
             ],
             "title": "Servings"
+          },
+          "calories": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Calories",
+            "description": "Calories per serving"
           },
           "image_url": {
             "anyOf": [
@@ -2758,6 +2796,17 @@
             ],
             "title": "Servings"
           },
+          "calories": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Calories"
+          },
           "image_url": {
             "anyOf": [
               {
@@ -2779,6 +2828,7 @@
           "cook_time",
           "difficulty_level",
           "servings",
+          "calories",
           "image_url"
         ],
         "title": "RecipeSummary",
